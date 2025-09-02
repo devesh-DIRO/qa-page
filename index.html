@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Secure Home Page</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 20px rgba(0,0,0,0.15);
+      max-width: 600px;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    p {
+      color: #555;
+    }
+
+    /* Disable print preview */
+    @media print {
+      body {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Welcome to Secure Home Page</h1>
+    <p>This page has print and screenshot restrictions enabled.</p>
+  </div>
+
+  <script>
+    // Disable right-click
+    document.addEventListener("contextmenu", function(e) {
+      e.preventDefault();
+      alert("Right-click is disabled on this page.");
+    });
+
+    // Disable printing (Ctrl+P)
+    document.addEventListener("keydown", function(e) {
+      if ((e.ctrlKey && e.key === "p") || e.key === "PrintScreen") {
+        e.preventDefault();
+        alert("Print and screenshot functions are disabled.");
+      }
+    });
+
+    // Detect PrintScreen (PrtScn key) and overwrite clipboard
+    document.addEventListener("keyup", function(e) {
+      if (e.key === "PrintScreen") {
+        navigator.clipboard.writeText("Screenshots are disabled for this page.")
+          .then(() => alert("Screenshot attempt blocked."));
+      }
+    });
+  </script>
+</body>
+</html>
