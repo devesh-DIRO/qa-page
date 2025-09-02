@@ -1,73 +1,54 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Secure Home Page</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .container {
-      background: white;
-      padding: 40px;
-      border-radius: 12px;
-      box-shadow: 0px 4px 20px rgba(0,0,0,0.15);
-      max-width: 600px;
-    }
-
-    h1 {
-      color: #333;
-    }
-
-    p {
-      color: #555;
-    }
-
-    /* Disable print preview */
-    @media print {
-      body {
-        display: none !important;
-      }
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Protected Demo Site</title>
+  <link rel="stylesheet" href="./style.css" />
+  <meta name="robots" content="noindex,nofollow" />
+  <meta name="screenshot-protect" content="strict" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data: https:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="format-detection" content="telephone=no" />
 </head>
 <body>
-  <div class="container">
-    <h1>Welcome to Secure Home Page</h1>
-    <p>This page has print and screenshot restrictions enabled.</p>
+  <div id="app">
+    <header class="site-header">
+      <h1>Protected Content Demo</h1>
+      <p>Enhanced protection against external screenshot software, browser extensions, and automated tools.</p>
+      <label class="strict-toggle">
+        <input id="strict-toggle" type="checkbox" checked />
+        <span>Strict mode: always-on shield; hold "V" key or mouse button to view temporarily.</span>
+      </label>
+    </header>
+
+    <main class="site-main">
+      <section>
+        <h2>Example Section</h2>
+        <p>
+          This is example content. Attempt to take a screenshot or print the page; it
+          should appear blank due to the protection overlay and print stylesheet.
+        </p>
+      </section>
+      <section>
+        <h2>Images</h2>
+        <p>Images are also covered by the overlay.</p>
+        <img src="https://picsum.photos/640/360" alt="Random" />
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <small>Note: True screenshot prevention is not guaranteed on the open web.</small>
+    </footer>
   </div>
 
-  <script>
-    // Disable right-click
-    document.addEventListener("contextmenu", function(e) {
-      e.preventDefault();
-      alert("Right-click is disabled on this page.");
-    });
+  <!-- Highest z-index overlay that blanks the screen when active -->
+  <div id="screenshot-shield" aria-hidden="true"></div>
 
-    // Disable printing (Ctrl+P)
-    document.addEventListener("keydown", function(e) {
-      if ((e.ctrlKey && e.key === "p") || e.key === "PrintScreen") {
-        e.preventDefault();
-        alert("Print and screenshot functions are disabled.");
-      }
-    });
-
-    // Detect PrintScreen (PrtScn key) and overwrite clipboard
-    document.addEventListener("keyup", function(e) {
-      if (e.key === "PrintScreen") {
-        navigator.clipboard.writeText("Screenshots are disabled for this page.")
-          .then(() => alert("Screenshot attempt blocked."));
-      }
-    });
-  </script>
+  <script src="./app.js"></script>
+  
 </body>
 </html>
+
+
