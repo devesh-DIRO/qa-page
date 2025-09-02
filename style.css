@@ -1,0 +1,152 @@
+/* Base layout */
+:root {
+  --page-bg: #f7f8fa;
+  --text: #0f172a;
+  --muted: #475569;
+  --accent: #2563eb;
+  --radius: 12px;
+  --shield-bg: #ffffff;
+  --shield-transition-ms: 60;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--text);
+  background: var(--page-bg);
+  line-height: 1.55;
+}
+
+#app { max-width: 960px; margin: 40px auto; padding: 0 20px; }
+.site-header { margin-bottom: 28px; }
+.site-header h1 { margin: 0 0 8px; font-size: 28px; }
+.site-header p { margin: 0; color: var(--muted); }
+.strict-toggle { display: flex; align-items: center; gap: 8px; margin-top: 8px; user-select: none; }
+.site-main section { background: #fff; border-radius: var(--radius); padding: 20px; box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.08); margin-bottom: 20px; }
+.site-main img { display: block; max-width: 100%; height: auto; border-radius: 10px; }
+.site-footer { color: var(--muted); margin-top: 16px; }
+
+/* Screenshot shield overlay */
+#screenshot-shield {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--shield-bg);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2147483647; /* maximum practical value */
+  transition: opacity calc(var(--shield-transition-ms) * 1ms) linear;
+}
+
+body.shielded #screenshot-shield { opacity: 1; }
+
+/* Optional: give a subtle blur to content while shield is active (underneath) */
+body.shielded #app { filter: blur(2px); }
+
+/* Additional protection layers */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Disable text selection and context menu */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Disable right-click context menu */
+body {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Disable drag and drop */
+img, video, canvas {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
+/* Hide content when extensions might be active */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  body.extension-detected * {
+    visibility: hidden !important;
+  }
+  body.extension-detected #screenshot-shield {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+}
+
+/* Print: ensure blank output */
+@media print {
+  /* Hide all content during print */
+  body * { 
+    visibility: hidden !important; 
+    opacity: 0 !important;
+    color: transparent !important;
+    background: transparent !important;
+  }
+  /* Ensure the shield itself is visible and covers the page on print */
+  #screenshot-shield { 
+    opacity: 1 !important; 
+    visibility: visible !important;
+    background: white !important;
+    color: transparent !important;
+  }
+  /* Override any inline styles */
+  * {
+    background-image: none !important;
+    background-color: white !important;
+    color: white !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Additional media queries for different capture scenarios */
+@media screen and (max-resolution: 72dpi) {
+  /* Low resolution might indicate screenshot */
+  #screenshot-shield { opacity: 0.3; }
+}
+
+@media screen and (orientation: portrait) and (max-width: 480px) {
+  /* Mobile screenshot detection enhancement */
+  body.shielded #app { 
+    filter: blur(5px) brightness(0.1);
+    transform: scale(0.1);
+  }
+}
+
+/* CSS-only protection against some automated tools */
+@supports (backdrop-filter: blur(10px)) {
+  #screenshot-shield {
+    backdrop-filter: blur(10px) brightness(10);
+  }
+}
+
+
